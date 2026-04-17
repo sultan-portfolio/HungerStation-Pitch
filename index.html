@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan Alqahtani | The CX Engine for HungerStation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --yellow: #FFB80E;
+            --dark-red: #982121;
+            --bright-red: #E32929;
+            --bg-black: #0D0D0D;
+            --text-gray: #B0B0B0;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight { color: var(--yellow); }
+        .red-highlight { color: var(--bright-red); }
+
+        /* Section 1: Hero */
+        #hero {
+            text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0d0d0d 100%);
+        }
+
+        #hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        #hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+        }
+
+        /* Section 2: Market Reality */
+        #reality {
+            background-color: #111;
+            border-top: 4px solid var(--dark-red);
+        }
+
+        .reality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 40px;
+        }
+
+        .reality-card {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 15px;
+            border-right: 5px solid var(--bright-red);
+        }
+
+        /* Section 3: My Numbers */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(145deg, #151515, #0a0a0a);
+            border: 1px solid #333;
+            border-radius: 20px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--yellow);
+            display: block;
+        }
+
+        /* Section 4: Flywheel */
+        .flywheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 50px auto;
+        }
+
+        .flywheel-circle {
+            width: 100%;
+            height: 100%;
+            border: 8px dashed var(--yellow);
+            border-radius: 50%;
+            position: absolute;
+            animation: rotate 20s linear infinite;
+        }
+
+        .flywheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .flywheel-item {
+            position: absolute;
+            background: var(--bg-black);
+            padding: 10px 20px;
+            border: 1px solid var(--yellow);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Section 5: 90-Day Plan */
+        .timeline {
+            max-width: 800px;
+            position: relative;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            border-right: 2px solid var(--yellow);
+            margin-right: 20px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 25px;
+            width: 18px;
+            height: 18px;
+            background: var(--yellow);
+            border-radius: 50%;
+        }
+
+        /* Section 7: CTA */
+        .cta-btn {
+            background-color: var(--yellow);
+            color: black;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.1);
+            background-color: #ffca43;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .flywheel-container { width: 300px; height: 300px; }
+            #hero h1 { font-size: 2.5rem; }
+            .stat-number { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section id="hero">
+        <h1 dir="ltr">The War for <span class="highlight">Retention</span> Has Begun.</h1>
+        <p>Keeta صرفت مليار ريال عشان تسرق عملائك. الحل مو ميزانية أكبر، الحل هو محرك تجربة عميل (CX) أذكى.</p>
+        <p>أنا سلطان القحطاني — CCXP® Certified. جيت عشان أبني هالمحرك.</p>
+    </section>
+
+    <section id="reality">
+        <h2 style="font-size: 3rem; margin-bottom: 40px;">الواقع المرّ</h2>
+        <div class="reality-grid">
+            <div class="reality-card">
+                <h3 class="red-highlight">المنافس (Keeta)</h3>
+                <p>150 مليون طلب. 23 مدينة. سنة واحدة فقط.</p>
+            </div>
+            <div class="reality-card">
+                <h3 class="highlight">HungerStation</h3>
+                <p>10 مليون مشترك في HPlus مهددين بالخروج.</p>
+            </div>
+            <div class="reality-card">
+                <h3 class="red-highlight">الألم</h3>
+                <p>دعم آلي، استرداد أموال بطيء، طلبات ملغاة.</p>
+            </div>
+        </div>
+        <p style="margin-top: 50px; font-size: 1.5rem; font-weight: bold;">"لما يتساوى السعر — التجربة هي اللي تحدد مين يبقى"</p>
+    </section>
+
+    <section id="stats">
+        <h2 style="margin-bottom: 40px;">ماذا سأقدم لـ HungerStation؟</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-number" data-target="17">0</span>
+                <p>Churn Reduction (45 Days)<br>استبقاء أكثر لمشتركي HPlus</p>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" data-target="57">0</span>
+                <p>Lead-to-Loyal<br>تحويل كل مشترك لمدافع عن العلامة</p>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" data-target="18">0</span>
+                <p>CSAT Improvement<br>رضا حقيقي يتفوق على الخصومات</p>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" data-target="100">0</span>
+                <p>Activation Rate<br>صفر مستخدمين غير مفعلين</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="flywheel">
+        <h2 style="margin-bottom: 20px;">The CX Retention Flywheel</h2>
+        <div class="flywheel-container">
+            <div class="flywheel-circle"></div>
+            <div class="flywheel-center">
+                <h3 class="highlight">HPlus<br>Success</h3>
+            </div>
+            <div class="flywheel-item" style="top: -10%; left: 30%;">Retention ↑</div>
+            <div class="flywheel-item" style="top: 20%; left: 85%;">LTV ↑</div>
+            <div class="flywheel-item" style="top: 70%; left: 80%;">HPlus Revenue ↑</div>
+            <div class="flywheel-item" style="top: 90%; left: 30%;">Less Discounts</div>
+            <div class="flywheel-item" style="top: 70%; left: -20%;">Beat Keeta</div>
+            <div class="flywheel-item" style="top: 20%; left: -25%;">Organic Growth</div>
+        </div>
+        <p style="text-align: center; max-width: 600px;">زيادة 5% في الاستبقاء ترفع الأرباح حتى 95%.<br>سويتها قبل، وبسويها معكم.</p>
+    </section>
+
+    <section id="plan">
+        <h2 style="margin-bottom: 50px;">خطة الـ 90 يوماً الأولى</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3 class="highlight">أيام 1–30: LISTEN</h3>
+                <p>رسم رحلة العميل بالكامل · تحليل NPS · مقابلة 50 مشترك HPlus غادروا المنصة · تحديد أكبر 3 نقاط فشل.</p>
+            </div>
+            <div class="timeline-item">
+                <h3 class="highlight">أيام 31–60: FIX</h3>
+                <p>إعادة تصميم لحظة استلام الطلب · تقليل وقت استرجاع الأموال · إطلاق مبادرة حل المشكلة من أول اتصال (FCR).</p>
+            </div>
+            <div class="timeline-item">
+                <h3 class="highlight">أيام 61–90: BUILD</h3>
+                <p>إطلاق برنامج استبقاء HPlus · بناء لوحة تحكم CX للقيادة · تقديم أول QBR مع توصيات OKR صلبة.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-me">
+        <h2 style="margin-bottom: 30px;">لماذا أنا؟ (The Rare Combination)</h2>
+        <ul style="list-style: none; font-size: 1.2rem; text-align: right; max-width: 700px;">
+            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle highlight"></i> CCXP® — الشهادة العالمية الوحيدة المعتمدة في تجربة العميل.</li>
+            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle highlight"></i> 7 سنوات خبرة: Amazon · LG · Alaan · Zid · JD Logistics.</li>
+            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle highlight"></i> سعودي أفهم سيكولوجية العميل المحلي بعمق.</li>
+            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle highlight"></i> بنيت أقسام CX من الصفر، ما كنت مجرد "مشرف" عليها.</li>
+        </ul>
+        <h3 style="margin-top: 40px; border: 2px solid var(--yellow); padding: 20px; border-radius: 10px;">
+            "أنا لا أدير التجربة.. أنا أهندسها."
+        </h3>
+    </section>
+
+    <section id="cta">
+        <h2 style="font-size: 2.5rem; text-align: center;">خلونا نحول 10 مليون مشترك إلى 10 مليون مدافع عن HungerStation.</h2>
+        <a href="tel:+966599061969" class="cta-btn">تواصل معي الآن</a>
+        <div style="margin-top: 40px; text-align: center;">
+            <p>سلطان القحطاني CCXP®</p>
+            <p>SultanFq.career@gmail.com</p>
+            <p dir="ltr">linkedin.com/in/sultanfalahalqahtani1</p>
+        </div>
+    </section>
+
+    <script>
+        // Scroll Animation
+        const sections = document.querySelectorAll('section');
+        const observerOptions = { threshold: 0.3 };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    if(entry.target.id === 'stats') {
+                        startCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        // Counters Animation
+        function startCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / 100;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => startCounters(), 10);
+                } else {
+                    counter.innerText = (target === 17 || target === 18) ? `-${target}%` : `${target}%`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
