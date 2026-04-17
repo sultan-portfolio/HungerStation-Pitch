@@ -9,15 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg-color: #030303;
-    --grid-color: rgba(255, 255, 255, 0.03);
+    --bg-color: #000000;
+    --grid-color: rgba(255, 184, 14, 0.03); /* Subtle yellow grid */
     --primary-color: #FFB80E; /* HungerStation Yellow */
-    --primary-glow: rgba(255, 184, 14, 0.4);
     --accent-color: #982121; /* Dark Red */
     --text-color: #E0E0E0;
-    --gray-text: #7a7a7a;
-    --glass-bg: rgba(20, 20, 20, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --gray-text: #888888;
+    --card-bg: rgba(10, 10, 10, 0.85);
+    --card-border: rgba(255, 184, 14, 0.15);
 }
 
 * {
@@ -27,140 +26,159 @@
     scroll-behavior: smooth;
 }
 
-/* KINETIC BACKGROUND */
 body {
     background-color: var(--bg-color);
     background-image: 
         linear-gradient(var(--grid-color) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-size: 50px 50px;
+    background-attachment: fixed;
     color: var(--text-color);
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
     line-height: 1.6;
 }
 
-/* NOISE FILTER */
 body::after {
     content: "";
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
     pointer-events: none;
     z-index: 9998;
 }
 
-/* PROGRESS BAR */
 #scroll-progress {
     position: fixed;
-    top: 0; left: 0; height: 3px;
+    top: 0; left: 0; height: 4px;
     background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
     width: 0%;
     z-index: 10000;
-    box-shadow: 0 0 10px var(--primary-glow);
+    box-shadow: 0 0 15px rgba(255, 184, 14, 0.5);
 }
 
-/* NAV */
 nav {
     position: fixed;
     top: 0; width: 100%;
-    padding: 25px 5%;
+    padding: 20px 5%;
     display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(to bottom, rgba(3,3,3,0.9), transparent);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 9997;
 }
 
 .nav-brand {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
     color: #fff;
-    text-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 
 .nav-badge {
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
-    padding: 6px 18px;
-    font-size: 0.75rem;
+    padding: 5px 15px;
+    font-size: 0.8rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
-    border-radius: 2px;
     background: rgba(255, 184, 14, 0.05);
-    box-shadow: 0 0 15px rgba(255, 184, 14, 0.1) inset;
 }
 
-/* TYPOGRAPHY */
 h1, h2, h3 {
     font-family: 'Bebas Neue', sans-serif;
     text-transform: uppercase;
     font-weight: 400;
 }
 
+/* ==========================================================================
+   CARD-BASED LAYOUT SYSTEM
+   ========================================================================== */
+.pitch-container {
+    padding: 100px 5% 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+.pitch-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 80px 10%;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    transform: translateY(50px) scale(0.98);
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.pitch-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+}
+
+.pitch-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
 .section-label {
     display: flex; align-items: center; gap: 20px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--gray-text);
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     letter-spacing: 2px;
 }
 
 .section-label .line {
     flex-grow: 1; height: 1px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
 }
-
-section {
-    min-height: 100vh;
-    padding: 140px 10% 100px;
-    display: flex; flex-direction: column; justify-content: center;
-    opacity: 0; transform: translateY(40px);
-    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-    position: relative; z-index: 1;
-}
-
-section.visible { opacity: 1; transform: translateY(0); }
 
 /* 01 HERO */
-#hero {
-    background: radial-gradient(circle at 80% 20%, rgba(152, 33, 33, 0.15) 0%, transparent 40%);
+#hero-card {
+    margin-top: 40px;
+    background: radial-gradient(circle at right top, rgba(152, 33, 33, 0.15), var(--card-bg) 60%);
 }
 
-#hero h1 {
-    font-size: 7rem;
-    line-height: 0.85;
+#hero-card h1 {
+    font-size: 6rem;
+    line-height: 0.9;
     margin-bottom: 30px;
     letter-spacing: 1px;
-    text-shadow: 4px 4px 0px rgba(0,0,0,0.8);
 }
 
 .highlight {
     color: var(--primary-color);
     display: inline-block;
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 2px;
     margin-bottom: 25px;
     padding: 5px 15px;
     background: rgba(255, 184, 14, 0.05);
-    border-left: 4px solid var(--primary-color);
+    border-left: 3px solid var(--primary-color);
 }
 
 .hero-sub {
-    color: var(--text-color);
     font-size: 1.2rem;
-    max-width: 650px;
-    margin-bottom: 60px;
+    max-width: 600px;
+    margin-bottom: 50px;
     font-weight: 300;
-    opacity: 0.8;
+    color: #ccc;
 }
 
 .author-tag {
     font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     font-size: 1.2rem;
     color: var(--gray-text);
     display: flex;
@@ -168,197 +186,154 @@ section.visible { opacity: 1; transform: translateY(0); }
     gap: 15px;
 }
 .author-tag::before {
-    content: ""; width: 40px; height: 1px; background: var(--primary-color);
+    content: ""; width: 30px; height: 1px; background: var(--primary-color);
 }
 
-/* CARDS */
-.cards-container {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
+/* 02 PLATFORM */
+.crisis-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;
 }
 
-.glass-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    padding: 50px 40px;
-    position: relative;
-    backdrop-filter: blur(10px);
-    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+.crisis-box {
+    padding: 30px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-.glass-card::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-    background: var(--glass-border); transition: all 0.4s ease;
+.crisis-stat {
+    font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #fff; line-height: 1; display: block; margin-bottom: 10px;
 }
 
-.glass-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(255, 184, 14, 0.2);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    background: rgba(20, 20, 20, 0.9);
-}
-
-.glass-card:hover::before {
-    background: var(--primary-color);
-    box-shadow: 0 0 15px var(--primary-color);
-}
-
-.card-stat {
-    font-size: 4.5rem;
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    display: block;
-    margin-bottom: 15px;
-    line-height: 0.9;
-    text-shadow: 0 0 30px rgba(255,255,255,0.1);
-}
-
-.glass-card:hover .card-stat { color: var(--primary-color); }
-
-.card-desc { color: var(--gray-text); font-weight: 400; font-size: 1rem; }
+.crisis-desc { color: var(--gray-text); font-size: 0.95rem; }
 
 .editorial-line {
-    font-size: 3.5rem; margin-top: 100px; line-height: 1;
+    font-size: 3rem; margin-top: 60px; line-height: 1.1;
     font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 1px;
 }
 
-/* NUMBERS */
-.numbers-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
+/* 03 PROVEN METRICS (CONNECTED TO PREV EXP) */
+.metrics-grid {
+    display: flex; flex-direction: column; gap: 40px;
+}
 
-.stat-item { flex: 1; min-width: 180px; position: relative; }
+.metric-row {
+    display: flex; align-items: center; gap: 40px;
+    padding: 30px; background: rgba(0,0,0,0.4); border-radius: 8px;
+    border-left: 2px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.metric-row:hover {
+    border-left-color: var(--primary-color);
+    background: rgba(255, 184, 14, 0.02);
+}
+
+.metric-number {
+    flex: 0 0 200px;
+}
 
 .counter {
-    font-size: 5.5rem;
+    font-size: 5rem;
     font-family: 'Bebas Neue', sans-serif;
-    background: linear-gradient(180deg, #fff 30%, var(--gray-text) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
+    color: var(--primary-color);
     line-height: 1;
-    margin-bottom: 5px;
+    display: block;
 }
 
-.stat-label {
-    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px;
-    color: var(--primary-color); font-weight: 800; display: block;
+.metric-label {
+    font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
+    color: #fff; font-weight: 800; display: block; margin-top: 5px;
 }
 
-/* ==========================================================================
-   ADVANCED COUNTER-ROTATING FLYWHEEL 
-   ========================================================================== */
-#flywheel { align-items: center; }
+.metric-context {
+    flex: 1;
+}
 
+.context-company {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gray-text);
+    margin-bottom: 5px; display: block;
+}
+
+.context-desc {
+    font-size: 0.95rem; color: #ccc; font-weight: 300;
+}
+
+.context-impact {
+    margin-top: 10px; font-size: 0.9rem; font-weight: 600; color: var(--primary-color);
+}
+
+/* 04 FLYWHEEL */
 .flywheel-container {
-    width: 100%; max-width: 750px; margin: 0 auto; position: relative;
+    width: 100%; max-width: 650px; margin: 0 auto; position: relative;
 }
 
 .flywheel-svg {
-    width: 100%; height: auto;
-    filter: drop-shadow(0 0 40px rgba(255, 184, 14, 0.05));
+    width: 100%; height: auto; filter: drop-shadow(0 0 30px rgba(255, 184, 14, 0.05));
 }
 
-.center-text-main { font-family: 'Bebas Neue', sans-serif; font-size: 55px; fill: #fff; letter-spacing: 2px; }
-.center-text-sub { font-family: 'Bebas Neue', sans-serif; font-size: 18px; fill: var(--primary-color); letter-spacing: 6px; }
+.center-text-main { font-family: 'Bebas Neue', sans-serif; font-size: 50px; fill: #fff; letter-spacing: 2px; }
+.center-text-sub { font-family: 'Bebas Neue', sans-serif; font-size: 16px; fill: var(--primary-color); letter-spacing: 4px; }
 
-.node-bg {
-    fill: #080808;
-    stroke: var(--glass-border);
-    stroke-width: 2;
-    transition: all 0.3s ease;
-}
+.node-bg { fill: #000; stroke: var(--card-border); stroke-width: 2; transition: all 0.3s ease; }
+.node-text { font-family: 'Bebas Neue', sans-serif; font-size: 18px; fill: #fff; letter-spacing: 1px; pointer-events: none; }
 
-.node-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    fill: #fff;
-    letter-spacing: 1px;
-    pointer-events: none;
-}
-
-/* Interactive Hover state for SVG nodes */
-g.interactive-node:hover .node-bg {
-    stroke: var(--primary-color);
-    fill: rgba(255, 184, 14, 0.1);
-}
+g.interactive-node:hover .node-bg { stroke: var(--primary-color); fill: rgba(255, 184, 14, 0.1); }
 
 /* 05 TIMELINE */
-.timeline { display: flex; gap: 30px; }
+.timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
 .phase {
-    flex: 1; background: transparent; border: 1px solid var(--glass-border);
-    padding: 40px; border-radius: 2px;
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05);
+    padding: 30px; border-radius: 8px;
 }
-.phase:hover { border-color: rgba(255,255,255,0.3); }
 
 .phase-header {
-    color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
-    margin-bottom: 30px; display: flex; justify-content: space-between; align-items: baseline;
+    color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem;
+    margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline;
     border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
 }
-.phase-header span:last-child { font-size: 1.5rem; color: var(--accent-color); letter-spacing: 2px;}
+.phase-header span:last-child { font-size: 1.2rem; color: var(--accent-color); letter-spacing: 2px;}
 
 .phase ul { list-style: none; }
 .phase li {
-    margin-bottom: 18px; font-size: 0.95rem; color: var(--gray-text);
-    padding-left: 25px; position: relative; font-weight: 400;
+    margin-bottom: 12px; font-size: 0.9rem; color: #ccc;
+    padding-left: 20px; position: relative; font-weight: 300;
 }
 .phase li::before {
     content: ''; position: absolute; left: 0; top: 8px;
-    width: 8px; height: 8px; background: var(--primary-color);
+    width: 6px; height: 6px; background: var(--primary-color);
 }
 
-/* 06 WHY SULTAN */
-.why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 80px; }
-.why-card {
-    background: var(--glass-bg); padding: 35px; border-left: 2px solid var(--glass-border);
-    transition: all 0.3s ease;
-}
-.why-card:hover { border-left-color: var(--primary-color); background: #111; }
-.why-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--primary-color); display: block; margin-bottom: 10px; line-height: 1; opacity: 0.5;}
-.why-card:hover .why-num { opacity: 1; }
-.why-text { font-size: 1.1rem; font-weight: 600; color: #fff;}
-
-.quote-box {
-    background: #0a0a0a; padding: 80px; font-size: 4rem;
-    font-family: 'Bebas Neue', sans-serif; text-align: center;
-    border: 1px solid rgba(152, 33, 33, 0.3); line-height: 1.1;
-    position: relative; overflow: hidden;
-}
-.quote-box::after {
-    content: '"'; position: absolute; right: 20px; bottom: -60px;
-    font-size: 20rem; color: rgba(152, 33, 33, 0.1); line-height: 1;
+/* 06 CTA */
+#cta-card {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(152, 33, 33, 0.2), var(--card-bg));
+    border-color: rgba(152, 33, 33, 0.5);
 }
 
-/* 07 CTA */
-#cta { text-align: center; align-items: center; }
-.cta-big-text { font-size: 6rem; margin-bottom: 50px; line-height: 0.9; }
+.cta-big-text { font-size: 5rem; margin-bottom: 40px; line-height: 0.9; }
 
 .btn-primary {
-    display: inline-block; padding: 25px 70px;
-    background: #fff; color: #000; text-decoration: none;
-    font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
-    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-    letter-spacing: 3px; position: relative; overflow: hidden;
+    display: inline-block; padding: 20px 60px;
+    background: var(--primary-color); color: #000; text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+    transition: all 0.3s ease; letter-spacing: 2px; border-radius: 4px;
 }
-.btn-primary::before {
-    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: var(--primary-color); transition: all 0.4s ease; z-index: -1;
+.btn-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(255, 184, 14, 0.3);
 }
-.btn-primary:hover { color: #000; transform: scale(1.05); }
-.btn-primary:hover::before { left: 0; }
 
 .contact-info {
-    margin-top: 50px; color: var(--gray-text); font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem; letter-spacing: 4px;
+    margin-top: 40px; color: var(--gray-text); font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem; letter-spacing: 3px;
 }
 
 @media (max-width: 768px) {
-    #hero h1 { font-size: 4.5rem; }
-    .editorial-line { font-size: 2.5rem; }
-    .cta-big-text { font-size: 4rem; }
-    .timeline { flex-direction: column; }
-    nav { padding: 20px; }
-    .nav-brand { font-size: 1.5rem; }
-    .card-stat { font-size: 3.5rem; }
+    .pitch-container { padding: 80px 3% 30px; gap: 40px; }
+    .pitch-card { padding: 40px 6%; border-radius: 12px; }
+    #hero-card h1 { font-size: 4rem; }
+    .metric-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .cta-big-text { font-size: 3.5rem; }
 }
 </style>
 </head>
@@ -371,218 +346,189 @@ g.interactive-node:hover .node-bg {
     <div class="nav-badge">PITCH: HUNGERSTATION</div>
 </nav>
 
-<section id="hero">
-    <h1>The War for Retention <br>Has Begun.</h1>
-    <span class="highlight">Keeta spent 1 Billion SAR to bleed your base.</span>
-    <p class="hero-sub">You don't win a price war with a bigger budget. You win by engineering a Customer Experience engine that makes switching painful.</p>
-    <div class="author-tag">CCXP® CERTIFIED ARCHITECT</div>
-</section>
+<div class="pitch-container">
 
-<section id="platform">
-    <div class="section-label">01 / THE BURNING PLATFORM <div class="line"></div></div>
-    
-    <div class="cards-container">
-        <div class="glass-card">
-            <span class="card-stat">150M+</span>
-            <p class="card-desc">Orders hijacked by Keeta in Year 1. Rapid 23-city expansion fueled purely by aggressive predatory pricing.</p>
-        </div>
-        <div class="glass-card">
-            <span class="card-stat">10M</span>
-            <p class="card-desc">HPlus subscribers in the crosshairs. The core predictable revenue engine is currently unprotected from churn.</p>
-        </div>
-        <div class="glass-card" style="border-bottom: 3px solid var(--accent-color);">
-            <span class="card-stat" style="color: var(--accent-color);">FRICTION</span>
-            <p class="card-desc">Robotic SLAs, slow refund loops, and silent order cancellations are bleeding the user base faster than acquisition.</p>
-        </div>
+    <div class="pitch-card" id="hero-card">
+        <h1>The War for Retention <br>Has Begun.</h1>
+        <span class="highlight">Keeta spent 1 Billion SAR to bleed your base.</span>
+        <p class="hero-sub">You don't win a price war with a bigger budget. You win by engineering a Customer Experience engine that makes switching painful.</p>
+        <div class="author-tag">CCXP® CERTIFIED ARCHITECT</div>
     </div>
 
-    <h2 class="editorial-line">When the subsidy ends — <br><span style="color: var(--primary-color);">Experience</span> is the only moat.</h2>
-</section>
-
-<section id="numbers">
-    <div class="section-label">02 / PROVEN METRICS <div class="line"></div></div>
-    <div class="numbers-grid">
-        <div class="stat-item">
-            <span class="counter" data-target="-17">-17%</span>
-            <span class="stat-label">Churn Reduction (45 Days)</span>
-        </div>
-        <div class="stat-item">
-            <span class="counter" data-target="57">57%</span>
-            <span class="stat-label">Lead-to-Loyal Conv.</span>
-        </div>
-        <div class="stat-item">
-            <span class="counter" data-target="18">+18%</span>
-            <span class="stat-label">CSAT Delta</span>
-        </div>
-        <div class="stat-item">
-            <span class="counter" data-target="99.3">99.3%</span>
-            <span class="stat-label">SLA Integrity</span>
-        </div>
-        <div class="stat-item">
-            <span class="counter" data-target="100">100%</span>
-            <span class="stat-label">Product Adoption</span>
-        </div>
-    </div>
-</section>
-
-<section id="flywheel">
-    <div class="section-label">03 / THE RETENTION FLYWHEEL <div class="line"></div></div>
-
-    <div class="flywheel-container">
-        <svg class="flywheel-svg" viewBox="0 0 800 800">
-            <defs>
-                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="6" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-            </defs>
-
-            <circle cx="400" cy="400" r="320" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
-            <circle cx="400" cy="400" r="240" fill="none" stroke="var(--primary-color)" stroke-width="1" stroke-dasharray="4 12" opacity="0.4" />
-            
-            <circle cx="400" cy="400" r="130" fill="rgba(255, 184, 14, 0.03)" stroke="var(--primary-color)" stroke-width="2" filter="url(#glow)"/>
-            <text x="400" y="390" text-anchor="middle" class="center-text-main">BEAT KEETA</text>
-            <text x="400" y="425" text-anchor="middle" class="center-text-sub">WITHOUT A PRICE WAR</text>
-
-            <g>
-                <animateTransform attributeName="transform" type="rotate" from="0 400 400" to="360 400 400" dur="40s" repeatCount="indefinite" />
-                
-                <g transform="translate(400, 400) rotate(0) translate(0, -240)" class="interactive-node">
-                    <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
-                    <g>
-                        <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="-360 0 0" dur="40s" repeatCount="indefinite" />
-                        <circle cx="0" cy="0" r="50" class="node-bg" />
-                        <text x="0" y="6" text-anchor="middle" class="node-text" fill="var(--primary-color)">RETENTION ↑</text>
-                    </g>
-                </g>
-
-                <g transform="translate(400, 400) rotate(60) translate(0, -240)" class="interactive-node">
-                    <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
-                    <g>
-                        <animateTransform attributeName="transform" type="rotate" from="-60 0 0" to="-420 0 0" dur="40s" repeatCount="indefinite" />
-                        <circle cx="0" cy="0" r="50" class="node-bg" />
-                        <text x="0" y="6" text-anchor="middle" class="node-text">LTV MAX</text>
-                    </g>
-                </g>
-
-                <g transform="translate(400, 400) rotate(120) translate(0, -240)" class="interactive-node">
-                    <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
-                    <g>
-                        <animateTransform attributeName="transform" type="rotate" from="-120 0 0" to="-480 0 0" dur="40s" repeatCount="indefinite" />
-                        <circle cx="0" cy="0" r="50" class="node-bg" />
-                        <text x="0" y="6" text-anchor="middle" class="node-text">H+ REVENUE</text>
-                    </g>
-                </g>
-
-                <g transform="translate(400, 400) rotate(180) translate(0, -240)" class="interactive-node">
-                    <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
-                    <g>
-                        <animateTransform attributeName="transform" type="rotate" from="-180 0 0" to="-540 0 0" dur="40s" repeatCount="indefinite" />
-                        <circle cx="0" cy="0" r="50" class="node-bg" />
-                        <text x="0" y="6" text-anchor="middle" class="node-text">ORGANIC</text>
-                    </g>
-                </g>
-
-                <g transform="translate(400, 400) rotate(240) translate(0, -240)" class="interactive-node">
-                    <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
-                    <g>
-                        <animateTransform attributeName="transform" type="rotate" from="-240 0 0" to="-600 0 0" dur="40s" repeatCount="indefinite" />
-                        <circle cx="0" cy="0" r="50" class="node-bg" />
-                        <text x="0" y="6" text-anchor="middle" class="node-text">LOYALTY</text>
-                    </g>
-                </g>
-
-                <g transform="translate(400, 400) rotate(300) translate(0, -240)" class="interactive-node">
-                    <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
-                    <g>
-                        <animateTransform attributeName="transform" type="rotate" from="-300 0 0" to="-660 0 0" dur="40s" repeatCount="indefinite" />
-                        <circle cx="0" cy="0" r="50" class="node-bg" />
-                        <text x="0" y="6" text-anchor="middle" class="node-text">EFFICIENCY</text>
-                    </g>
-                </g>
-            </g>
-        </svg>
-    </div>
-</section>
-
-<section id="plan">
-    <div class="section-label">04 / EXECUTION ROADMAP <div class="line"></div></div>
-
-    <div class="timeline">
-        <div class="phase">
-            <div class="phase-header">
-                <span>LISTEN</span>
-                <span>DAY 01-30</span>
+    <div class="pitch-card">
+        <div class="section-label">01 / THE BURNING PLATFORM <div class="line"></div></div>
+        
+        <div class="crisis-grid">
+            <div class="crisis-box">
+                <span class="crisis-stat">150M+</span>
+                <p class="crisis-desc">Orders hijacked by Keeta in Year 1. Rapid 23-city expansion fueled purely by aggressive predatory pricing.</p>
             </div>
-            <ul>
-                <li>Map HPlus high-churn predictive touchpoints.</li>
-                <li>Audit support-to-refund operational latency.</li>
-                <li>Deploy granular Predictive Health Scorecards.</li>
-            </ul>
-        </div>
-        <div class="phase">
-            <div class="phase-header">
-                <span>FIX</span>
-                <span>DAY 31-60</span>
+            <div class="crisis-box">
+                <span class="crisis-stat">10M</span>
+                <p class="crisis-desc">HPlus subscribers in the crosshairs. The core predictable revenue engine is currently unprotected from churn.</p>
             </div>
-            <ul>
-                <li>Re-engineer escalation matrix for Top Tier B2B.</li>
-                <li>Integrate AI Shaded Routes automated feedback.</li>
-                <li>Close the Loop: Implement real-time routing.</li>
-            </ul>
-        </div>
-        <div class="phase">
-            <div class="phase-header">
-                <span>BUILD</span>
-                <span>DAY 61-90</span>
+            <div class="crisis-box">
+                <span class="crisis-stat" style="color: var(--accent-color);">FRICTION</span>
+                <p class="crisis-desc">Robotic SLAs, slow refund loops, and silent order cancellations are bleeding the user base faster than acquisition.</p>
             </div>
-            <ul>
-                <li>Launch conversion-focused 'Lead-to-Loyal' program.</li>
-                <li>Automate performance QBRs for Top Partners.</li>
-                <li>Fully operationalize the Retention Flywheel.</li>
-            </ul>
         </div>
-    </div>
-</section>
-
-<section id="whyme">
-    <div class="section-label">05 / THE ARCHITECT <div class="line"></div></div>
-
-    <div class="why-grid">
-        <div class="why-card">
-            <span class="why-num">01</span>
-            <span class="why-text">CCXP Global Standard Certification</span>
-        </div>
-        <div class="why-card">
-            <span class="why-num">02</span>
-            <span class="why-text">Proven 17% Churn Reduction Track Record</span>
-        </div>
-        <div class="why-card">
-            <span class="why-num">03</span>
-            <span class="why-text">Fintech & E-comm Operations Veteran</span>
-        </div>
-        <div class="why-card">
-            <span class="why-num">04</span>
-            <span class="why-text">Arabic-First GTM Localization Expert</span>
-        </div>
-        <div class="why-card">
-            <span class="why-num">05</span>
-            <span class="why-text">Data-Driven Analytical Strategist</span>
-        </div>
+        <h2 class="editorial-line">When the subsidy ends — <br><span style="color: var(--primary-color);">Experience</span> is the only moat.</h2>
     </div>
 
-    <div class="quote-box">
-        “I don’t manage experience. <br>I <span style="color: var(--primary-color)">engineer</span> it.”
-    </div>
-</section>
+    <div class="pitch-card" id="metrics-card">
+        <div class="section-label">02 / THE PROOF OF WORK <div class="line"></div></div>
+        
+        <div class="metrics-grid">
+            <div class="metric-row">
+                <div class="metric-number">
+                    <span class="counter" data-target="99.3">0</span>
+                    <span class="metric-label">SLA Integrity</span>
+                </div>
+                <div class="metric-context">
+                    <span class="context-company">AT AMAZON</span>
+                    <p class="context-desc">Engineered operational workflows to maintain near-perfect SLA adherence in high-pressure environments.</p>
+                    <p class="context-impact">→ APPLICATION: Eradicating HungerStation's refund latency and robotic support loops.</p>
+                </div>
+            </div>
 
-<section id="cta">
-    <h2 class="cta-big-text">Let’s turn 10M subscribers <br>into an impenetrable fortress.</h2>
-    <a href="mailto:SultanFq.career@gmail.com" class="btn-primary">INITIATE DEPLOYMENT</a>
-    <div class="contact-info">
-        +966 59 906 1969 &nbsp;|&nbsp; RIYADH, KSA
+            <div class="metric-row">
+                <div class="metric-number">
+                    <span class="counter" data-target="-17">0</span>
+                    <span class="metric-label">Churn Reduction</span>
+                </div>
+                <div class="metric-context">
+                    <span class="context-company">AT ALAAN (KSA LAUNCH)</span>
+                    <p class="context-desc">Restructured the CX architecture during the critical Saudi market launch, fixing friction points proactively.</p>
+                    <p class="context-impact">→ APPLICATION: Defending the 10M HPlus subscriber base from predatory switching.</p>
+                </div>
+            </div>
+
+            <div class="metric-row">
+                <div class="metric-number">
+                    <span class="counter" data-target="100">0</span>
+                    <span class="metric-label">Product Adoption</span>
+                </div>
+                <div class="metric-context">
+                    <span class="context-company">AT ZID</span>
+                    <p class="context-desc">Managed comprehensive B2B partner operations, ensuring total ecosystem activation and dependency.</p>
+                    <p class="context-impact">→ APPLICATION: Locking in Top Tier restaurants to HungerStation's exclusive ecosystem.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</section>
+
+    <div class="pitch-card">
+        <div class="section-label">03 / THE RETENTION SYSTEM <div class="line"></div></div>
+
+        <div class="flywheel-container">
+            <svg class="flywheel-svg" viewBox="0 0 800 800">
+                <circle cx="400" cy="400" r="320" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                <circle cx="400" cy="400" r="240" fill="none" stroke="var(--primary-color)" stroke-width="1" stroke-dasharray="4 12" opacity="0.4" />
+                <circle cx="400" cy="400" r="130" fill="rgba(255, 184, 14, 0.05)" stroke="var(--primary-color)" stroke-width="2" />
+                <text x="400" y="390" text-anchor="middle" class="center-text-main">BEAT KEETA</text>
+                <text x="400" y="425" text-anchor="middle" class="center-text-sub">WITHOUT A PRICE WAR</text>
+
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0 400 400" to="360 400 400" dur="40s" repeatCount="indefinite" />
+                    
+                    <g transform="translate(400, 400) rotate(0) translate(0, -240)" class="interactive-node">
+                        <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="-360 0 0" dur="40s" repeatCount="indefinite" />
+                            <circle cx="0" cy="0" r="50" class="node-bg" />
+                            <text x="0" y="6" text-anchor="middle" class="node-text" fill="var(--primary-color)">RETENTION ↑</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(400, 400) rotate(60) translate(0, -240)" class="interactive-node">
+                        <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="-60 0 0" to="-420 0 0" dur="40s" repeatCount="indefinite" />
+                            <circle cx="0" cy="0" r="50" class="node-bg" />
+                            <text x="0" y="6" text-anchor="middle" class="node-text">LTV MAX</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(400, 400) rotate(120) translate(0, -240)" class="interactive-node">
+                        <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="-120 0 0" to="-480 0 0" dur="40s" repeatCount="indefinite" />
+                            <circle cx="0" cy="0" r="50" class="node-bg" />
+                            <text x="0" y="6" text-anchor="middle" class="node-text">H+ REVENUE</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(400, 400) rotate(180) translate(0, -240)" class="interactive-node">
+                        <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="-180 0 0" to="-540 0 0" dur="40s" repeatCount="indefinite" />
+                            <circle cx="0" cy="0" r="50" class="node-bg" />
+                            <text x="0" y="6" text-anchor="middle" class="node-text">ORGANIC</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(400, 400) rotate(240) translate(0, -240)" class="interactive-node">
+                        <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="-240 0 0" to="-600 0 0" dur="40s" repeatCount="indefinite" />
+                            <circle cx="0" cy="0" r="50" class="node-bg" />
+                            <text x="0" y="6" text-anchor="middle" class="node-text">LOYALTY</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(400, 400) rotate(300) translate(0, -240)" class="interactive-node">
+                        <line x1="0" y1="50" x2="0" y2="110" stroke="var(--primary-color)" stroke-dasharray="2 4" opacity="0.5"/>
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="-300 0 0" to="-660 0 0" dur="40s" repeatCount="indefinite" />
+                            <circle cx="0" cy="0" r="50" class="node-bg" />
+                            <text x="0" y="6" text-anchor="middle" class="node-text">EFFICIENCY</text>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <div class="pitch-card">
+        <div class="section-label">04 / EXECUTION ROADMAP <div class="line"></div></div>
+
+        <div class="timeline">
+            <div class="phase">
+                <div class="phase-header"><span>LISTEN</span><span>DAY 01-30</span></div>
+                <ul>
+                    <li>Map HPlus high-churn predictive touchpoints.</li>
+                    <li>Audit support-to-refund operational latency.</li>
+                    <li>Deploy granular Predictive Health Scorecards.</li>
+                </ul>
+            </div>
+            <div class="phase">
+                <div class="phase-header"><span>FIX</span><span>DAY 31-60</span></div>
+                <ul>
+                    <li>Re-engineer escalation matrix for Top Tier B2B.</li>
+                    <li>Integrate AI automated feedback loops.</li>
+                    <li>Implement real-time support routing.</li>
+                </ul>
+            </div>
+            <div class="phase">
+                <div class="phase-header"><span>BUILD</span><span>DAY 61-90</span></div>
+                <ul>
+                    <li>Launch 'Lead-to-Loyal' conversion program.</li>
+                    <li>Automate performance QBRs for Partners.</li>
+                    <li>Operationalize the Retention Flywheel.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="pitch-card" id="cta-card">
+        <h2 class="cta-big-text">Let’s turn 10M subscribers <br>into an impenetrable fortress.</h2>
+        <a href="mailto:SultanFq.career@gmail.com" class="btn-primary">INITIATE DEPLOYMENT</a>
+        <div class="contact-info">
+            +966 59 906 1969 &nbsp;|&nbsp; RIYADH, KSA
+        </div>
+    </div>
+
+</div>
 
 <script>
 // Scroll Progress
@@ -593,30 +539,32 @@ window.addEventListener('scroll', () => {
     document.getElementById('scroll-progress').style.width = scrolled + '%';
 });
 
-// Reveal & Count Automation
-const sections = document.querySelectorAll('section');
-const observerOptions = { threshold: 0.15 };
+// Reveal Cards & Trigger Counters
+const cards = document.querySelectorAll('.pitch-card');
+const observerOptions = { threshold: 0.2, rootMargin: "0px 0px -100px 0px" };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            if (entry.target.id === 'numbers' && !entry.target.classList.contains('counted')) {
-                startCounters();
+            
+            // Trigger numbers animation ONLY when metrics card is visible
+            if (entry.target.id === 'metrics-card' && !entry.target.classList.contains('counted')) {
+                startCounters(entry.target);
                 entry.target.classList.add('counted');
             }
         }
     });
 }, observerOptions);
 
-sections.forEach(section => observer.observe(section));
+cards.forEach(card => observer.observe(card));
 
-// Precision Counters
-function startCounters() {
-    const counters = document.querySelectorAll('.counter');
+// Counter Animation Logic
+function startCounters(container) {
+    const counters = container.querySelectorAll('.counter');
     counters.forEach(counter => {
         const target = +counter.getAttribute('data-target');
-        const duration = 2000;
+        const duration = 2000; // 2 seconds
         const increment = target / (duration / 16);
         let current = 0;
 
@@ -624,16 +572,17 @@ function startCounters() {
             current += increment;
             if ((increment > 0 && current < target) || (increment < 0 && current > target)) {
                 let displayValue = target % 1 !== 0 ? current.toFixed(1) : Math.ceil(current);
+                
                 if (target === -17) counter.innerText = '-' + Math.abs(Math.ceil(current)) + '%';
-                else if (target === 18) counter.innerText = '+' + Math.ceil(current) + '%';
-                else if (target === 57 || target === 100) counter.innerText = Math.ceil(current) + '%';
+                else if (target === 99.3 || target === 100) counter.innerText = displayValue + '%';
                 else counter.innerText = displayValue;
+                
                 setTimeout(updateCount, 16);
             } else {
+                // Final hardcoded state for precision
                 if (target === -17) counter.innerText = '-17%';
-                else if (target === 18) counter.innerText = '+18%';
-                else if (target === 57 || target === 100) counter.innerText = target + '%';
                 else if (target === 99.3) counter.innerText = '99.3%';
+                else if (target === 100) counter.innerText = '100%';
                 else counter.innerText = target;
             }
         };
